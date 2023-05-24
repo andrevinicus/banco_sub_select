@@ -1,0 +1,58 @@
+SELECT OBTER_NOME_PF(CD_PESSOA_FISICA) NM_PESSOA_FISICA,
+ DT_ENTRADA,
+ DT_ALTA,
+  TO_DATE(TO_CHAR(DT_ALTA, 'YYYY-MM-DD  HH24:MI'),  'YYYY-MM-DD  HH24:MI')- 
+   TO_DATE(TO_CHAR(DT_ENTRADA,  'YYYY-MM-DD  HH24:MI') ,   'YYYY-MM-DD  HH24:MI') dia 
+ FROM dual,ATENDIMENTOS_V2
+WHERE DT_ENTRADA BETWEEN :dt_inicial AND fim_dia(:dt_final);
+
+
+24 * (to_date(dt_entrada, 'YYYY-MM-DD hh24:mi') 
+             - to_date(DT_ALTA, 'YYYY-MM-DD hh24:mi')) diff_hours 
+ 
+SELECT * FROM AGENDAMENTO_CANCELADO_V acv  WHERE rownum <=10;
+
+SELECT * FROM AGENDAMENTO_ WHERE rownum <=10;
+
+
+
+ SELECT OBTER_NOME_PF(CD_PESSOA_FISICA) NM_PESSOA_FISICA,
+ DT_ENTRADA,
+ DT_ALTA 
+ FROM ATENDIMENTOS_V2 av 
+WHERE rownum <=10;
+
+TO_DATE( TO_CHAR(DT_ENTRADA, 'YYYY-MM-DD'), 'YYYY-MM-DD') - 
+       TO_DATE(TO_CHAR(DT_ALTA, 'YYYY-MM-DD') , 'YYYY-MM-DD') DATEDIFF, 
+       
+       
+with tbl_demo AS
+    (SELECT TO_DATE(TO_CHAR(DT_ENTRADA, 'YYYY-MM-DD HH24:MI:SS')) dt1
+   , TO_DATE(TO_CHAR(DT_ALTA, 'YYYY-MM-DD HH24:MI:SS')) dt2 
+     FROM dual,ATENDIMENTOS_V2)
+SELECT dt1
+     , dt2
+     , round(dt2 - dt1,2) diff_days
+     , round(dt2 - dt1,2)*24 diff_hrs
+     , numtodsinterval((dt2 - dt1),'day') diff_dd_hh_mm_ss
+  from tbl_demo;    
+  
+ 
+SELECT 
+OBTER_NOME_PF(CD_PESSOA_FISICA) NM_PESSOA_FISICA,
+DT_ENTRADA,
+DT_ALTA,
+extract( day from intervalo ) Days,
+extract( hour from intervalo ) Hours,
+extract( minute from intervalo ) Minutes
+FROM 
+(
+	SELECT
+	 CD_PESSOA_FISICA,
+	 DT_ENTRADA, 
+	 DT_ALTA, 
+	 (CAST(DT_ALTA as timestamp) - CAST(DT_ENTRADA as timestamp)) intervalo
+from ATENDIMENTOS_V2
+)
+WHERE DT_ALTA IS NOT NULL
+AND DT_ENTRADA BETWEEN :dt_inicial AND fim_dia(:dt_final)
